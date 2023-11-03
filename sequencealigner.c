@@ -92,3 +92,20 @@ void find_nonsense(char* input, char* ref, unsigned int len){
     }
 
 }
+
+double percent_homology(char* input, char* ref){
+    unsigned int snplen1;
+    unsigned int* muts = find_snps(input, ref, &snplen1);
+    int totallen = 0;
+    while (input[totallen]){
+        totallen++;
+    }
+    return (snplen1 / (double) totallen) * 100.00;
+    free(muts);
+}
+
+void print_homology(char* input, char* ref){
+    double hom = percent_homology(input, ref);
+    printf("The sequences are %f percent homologous.\n", hom);
+    return;
+}
