@@ -29,7 +29,6 @@ unsigned int* find_snps(char* input, char* ref, unsigned int* snplen){
         }
         j++;
     }
-    
     if (j != i){
         fprintf(stderr, "find_snps: input and ref are of different lengths, please input sequences of the same length");
         exit(1);
@@ -58,7 +57,11 @@ void print_snps(char* input, char* ref){
 
 // unsigned int contains_start_codon(char* input, char* ref){
 //     /*fix toupper syntax*/
-//     char* input1 = toupper(input);
+//     int i = 0;
+//     char* inputnew = malloc(sizeof())
+//     while (input[i]){
+//         inputnew[i]
+//     }
 //     char* ref1 = toupper(ref);
 //     unsigned int i = 0;
 //     while(ref1[i+2]){
@@ -104,8 +107,8 @@ double percent_homology(char* input, char* ref){
     while (input[totallen]){
         totallen++;
     }
-    return (snplen1 / (double) totallen) * 100.00;
     free(muts);
+    return (snplen1 / (double) totallen) * 100.00;
 }
 
 void print_homology(char* input, char* ref){
@@ -115,18 +118,19 @@ void print_homology(char* input, char* ref){
 }
 
 int main(int argc, char** argv){
-    // int x = 0;
-    // int y = 0;
-    // while(argv[x]){
-    //     x++;
-    //     while (argv[x][y]){
-    //         if (argv[x][y] != ("A" || "G" || "C" || "T")){
-    //             fprintf(stderr, "main: arguments not of correct type\n");
-    //             exit(1);
-    //         }
-    //         y++;
-    //     }
-    // }
+    int x = 0;
+    while(x < argc - 1){
+        x++;
+        int y = 0;
+        while (argv[x][y]){
+            if (argv[x][y] != 'A' && argv[x][y] != 'T' && argv[x][y] != 'G' 
+            && argv[x][y] != 'C' && argv[x][y] != 'U' && argv[x][y] != 'N'){
+                fprintf(stderr, "main: arguments not of correct type\n");
+                exit(1);
+            }
+            y++;
+        }
+    }
     printf("SNPS:\n");
     print_snps(argv[1], argv[2]);
     printf("Homology:\n");
