@@ -48,44 +48,41 @@ void print_snps(char* input, char* ref){
     unsigned int i = 0;
     while (input[i]){
         if (input[i] != ref[i]){
-            printf("There is a %c to %c mutation at BP %d\n", 
+            printf("There is a %c to %c mutation at BP %d.\n", 
             ref[i], input[i], i+1);
         }
         i++;
     }
 }
 
-// unsigned int contains_start_codon(char* input, char* ref){
-//     /*fix toupper syntax*/
-//     int i = 0;
-//     char* inputnew = malloc(sizeof())
-//     while (input[i]){
-//         inputnew[i]
-//     }
-//     char* ref1 = toupper(ref);
-//     unsigned int i = 0;
-//     while(ref1[i+2]){
-//         if (ref1[i] == 'A' && ref1[i+1] == 'U' && ref1[i+2] == 'G'){
-//             return 1;
-//         }
-//         i++;
-//     }
-//     return 0;
-// }
+unsigned int contains_start_codon(char* ref){
+    /*fix toupper syntax*/
+    unsigned int i = 0;
+    while(ref[i+2]){
+        if ((ref[i] == 'A' && ref[i+1] == 'U' && ref[i+2] == 'G')
+        ||(ref[i] == 'A' && ref[i+1] == 'T' && ref[i+2] == 'G')){
+            return 1;
+        }
+        i++;
+    }
+    return 0;
+}
 
-// unsigned int find_start_codon(char* input, char* ref){
-//     if (!contains_start_codon(input, ref)){
-//         fprintf(stderr, "find_start_codon: no start codon exists in sequence");
-//         exit(1);
-//     }
-//     unsigned int i = 0;
-//     while(ref[i+2]){
-//         if (ref[i] == 'A' && ref[i+1] == 'U' && ref[i+2] == 'G'){
-//             return i;
-//         }
-//         i++;
-//     }
-// }
+unsigned int find_start_codon(char* ref){
+    if (!contains_start_codon(ref)){
+        fprintf(stderr, "find_start_codon: no start codon exists in sequence");
+        exit(1);
+    }
+    unsigned int i = 0;
+    while(ref[i+2]){
+        if ((ref[i] == 'A' && ref[i+1] == 'U' && ref[i+2] == 'G') || 
+        (ref[i] == 'A' && ref[i+1] == 'T' && ref[i+2] == 'G')){
+            return i + 1;
+        }
+        i++;
+    }
+    return 0;
+}
 
 // void find_nonsense(char* input, char* ref, unsigned int len){
 //     /*acquire snpslocs*/
@@ -100,7 +97,7 @@ void print_snps(char* input, char* ref){
 
 // }
 
-double percent_homology(char* input, char* ref){
+float percent_homology(char* input, char* ref){
     unsigned int snplen1;
     unsigned int* muts = find_snps(input, ref, &snplen1);
     int totallen = 0;
@@ -108,11 +105,11 @@ double percent_homology(char* input, char* ref){
         totallen++;
     }
     free(muts);
-    return (snplen1 / (double) totallen) * 100.00;
+    return (snplen1 / (float) totallen) * 100.00;
 }
 
 void print_homology(char* input, char* ref){
-    double hom = percent_homology(input, ref);
+    float hom = percent_homology(input, ref);
     printf("The sequences are %f percent homologous.\n", hom);
     return;
 }
@@ -131,9 +128,14 @@ int main(int argc, char** argv){
             y++;
         }
     }
-    printf("SNPS:\n");
+    printf("SNPs:\n");
     print_snps(argv[1], argv[2]);
     printf("Homology:\n");
     print_homology(argv[1], argv[2]);
+    if (contains_start_codon(argv[1])){
+        printf("Methionine detected in reading frame at BP %u.\n", 
+        find_start_codon(argv[1]));
+        
     return 1;
+    }
 }
