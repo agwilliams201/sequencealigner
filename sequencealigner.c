@@ -14,6 +14,8 @@ unsigned int* find_snps(char* input, char* ref, unsigned int* snplen){
         if (input[i] != ref[i]){
             snpslen++;
         }
+        i++;
+    }
     /*mallocing snpslocs array*/
     unsigned int* snpslocs;
     snpslocs = malloc(sizeof(unsigned int) * snpslen);
@@ -25,6 +27,7 @@ unsigned int* find_snps(char* input, char* ref, unsigned int* snplen){
             snpslocs[count] = j;
             count++;
         }
+        j++;
     }
     if (j != i){
         fprintf(stderr, "find_snps: input and ref are of different lengths, please input sequences of the same length");
@@ -33,7 +36,6 @@ unsigned int* find_snps(char* input, char* ref, unsigned int* snplen){
     /*setting out parameter equal to snpslen*/
     *snplen = snpslen;
     return snpslocs;
-    }
 }
 
 void print_snps(char* input, char* ref){
@@ -49,49 +51,50 @@ void print_snps(char* input, char* ref){
             printf("There is a %c to %c mutation at BP %d\n", 
             ref[i], input[i], i+1);
         }
-    }
-}
-
-unsigned int contains_start_codon(char* input, char* ref){
-    /*fix toupper syntax*/
-    input = toupper(input);
-    ref = toupper(ref);
-    unsigned int i = 0;
-    while(ref[i+2]){
-        if (ref[i] == 'A' && ref[i+1] == 'U' && ref[i+2] == 'G'){
-            return 1;
-        }
-        i++;
-    }
-    return 0;
-}
-
-unsigned int find_start_codon(char* input, char* ref){
-    if (!contains_start_codon(input, ref)){
-        fprintf(stderr, "find_start_codon: no start codon exists in sequence");
-        exit(1);
-    }
-    unsigned int i = 0;
-    while(ref[i+2]){
-        if (ref[i] == 'A' && ref[i+1] == 'U' && ref[i+2] == 'G'){
-            return i;
-        }
         i++;
     }
 }
 
-void find_nonsense(char* input, char* ref, unsigned int len){
-    /*acquire snpslocs*/
-    /*this is an issue because whether or not something is nonsense depends 
-    entirely on where start codon is-- maybe search for start codon in sequence,
-     otherwise fail? come back later...*/
-    unsigned int snplen;
-    unsigned int* snpsloc = snpslocs(input, ref, len, &snplen);
-    for (int i = 0; i < snplen; i++){
-        /*do switch statements here*/
-    }
+// unsigned int contains_start_codon(char* input, char* ref){
+//     /*fix toupper syntax*/
+//     char* input1 = toupper(input);
+//     char* ref1 = toupper(ref);
+//     unsigned int i = 0;
+//     while(ref1[i+2]){
+//         if (ref1[i] == 'A' && ref1[i+1] == 'U' && ref1[i+2] == 'G'){
+//             return 1;
+//         }
+//         i++;
+//     }
+//     return 0;
+// }
 
-}
+// unsigned int find_start_codon(char* input, char* ref){
+//     if (!contains_start_codon(input, ref)){
+//         fprintf(stderr, "find_start_codon: no start codon exists in sequence");
+//         exit(1);
+//     }
+//     unsigned int i = 0;
+//     while(ref[i+2]){
+//         if (ref[i] == 'A' && ref[i+1] == 'U' && ref[i+2] == 'G'){
+//             return i;
+//         }
+//         i++;
+//     }
+// }
+
+// void find_nonsense(char* input, char* ref, unsigned int len){
+//     /*acquire snpslocs*/
+//     /*this is an issue because whether or not something is nonsense depends 
+//     entirely on where start codon is-- maybe search for start codon in sequence,
+//      otherwise fail? come back later...*/
+//     unsigned int snplen;
+//     unsigned int* snpsloc = snpslocs(input, ref, len, &snplen);
+//     for (int i = 0; i < snplen; i++){
+//         /*do switch statements here*/
+//     }
+
+// }
 
 double percent_homology(char* input, char* ref){
     unsigned int snplen1;
@@ -108,4 +111,24 @@ void print_homology(char* input, char* ref){
     double hom = percent_homology(input, ref);
     printf("The sequences are %f percent homologous.\n", hom);
     return;
+}
+
+int main(int argc, char** argv){
+    // int x = 0;
+    // int y = 0;
+    // while(argv[x]){
+    //     x++;
+    //     while (argv[x][y]){
+    //         if (argv[x][y] != ("A" || "G" || "C" || "T")){
+    //             fprintf(stderr, "main: arguments not of correct type\n");
+    //             exit(1);
+    //         }
+    //         y++;
+    //     }
+    // }
+    printf("SNPS:\n");
+    print_snps(argv[1], argv[2]);
+    printf("Homology:\n");
+    print_homology(argv[1], argv[2]);
+    return 1;
 }
