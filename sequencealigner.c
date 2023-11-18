@@ -29,6 +29,7 @@ unsigned int* find_snps(char* input, char* ref, unsigned int* snplen){
         }
         j++;
     }
+    
     if (j != i){
         fprintf(stderr, "find_snps: input and ref are of different lengths, please input sequences of the same length");
         exit(1);
