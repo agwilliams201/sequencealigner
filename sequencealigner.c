@@ -38,6 +38,7 @@ unsigned int* find_snps(char* input, char* ref, unsigned int* snplen){
     return snpslocs;
 }
 
+
 void print_snps(char* input, char* ref){
     /*Iterating through once to measure print*/
     /*what I really want to do here is pass find_snps to print_snps 
@@ -113,6 +114,8 @@ void print_homology(char* input, char* ref){
     printf("The sequences are %f percent homologous.\n", hom);
     return;
 }
+
+
 
 int main(int argc, char** argv){
     int x = 0;
